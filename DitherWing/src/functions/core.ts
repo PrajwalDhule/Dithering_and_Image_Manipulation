@@ -24,19 +24,21 @@ export function diffuseError(
 
 export function applySettings(
   originalImage: HTMLImageElement,
+  inputCanvas: HTMLCanvasElement,
   outputCanvas: HTMLCanvasElement,
   scaleFactor: number
 ) {
-  document.getElementById("canvas")?.remove();
+  // document.getElementById("canvas")?.remove();
+  // // const inputCanvas = document.createElement("canvas");
+  // inputCanvas.id = "canvas";
+  // inputCanvas.style.display = "none";
 
-  const canvas = document.createElement("canvas");
-  canvas.id = "canvas";
-  canvas.style.display = "none";
+  inputCanvas.width = Math.round(originalImage.width * scaleFactor);
+  inputCanvas.height = Math.round(originalImage.height * scaleFactor);
 
-  canvas.width = Math.round(originalImage.width * scaleFactor);
-  canvas.height = Math.round(originalImage.height * scaleFactor);
-
-  let ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
+  let ctx = inputCanvas.getContext("2d", {
+    willReadFrequently: true,
+  }) as CanvasRenderingContext2D;
   // filters using css properties
   // ctx.filter = "blur(2px)";
   // ctx.filter = "grayscale(100%)";
@@ -47,20 +49,24 @@ export function applySettings(
   // ctx.filter = "opacity(30%)";
   // ctx.filter = "saturate(8)";
   // ctx.filter = "sepia(100%)";
-  ctx.drawImage(originalImage, 0, 0, canvas.width, canvas.height);
-  const resizedImageSrc = canvas.toDataURL();
+  ctx.drawImage(originalImage, 0, 0, inputCanvas.width, inputCanvas.height);
+  const resizedImageSrc = inputCanvas.toDataURL();
   const image = new Image();
   image.src = resizedImageSrc;
 
   image.onload = () => {
     const width = image.width;
     const height = image.height;
-    canvas.width = originalImage.width;
-    canvas.height = originalImage.height;
-    document.body.appendChild(canvas);
+    inputCanvas.width = originalImage.width;
+    inputCanvas.height = originalImage.height;
 
-    ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
+    // document.body.appendChild(inputCanvas);
+
+    ctx = inputCanvas.getContext("2d", {
+      willReadFrequently: true,
+    }) as CanvasRenderingContext2D;
     ctx.drawImage(image, 0, 0, width, height);
+    // inputCanvas.style.display = "block";
 
     const imageData = ctx.getImageData(0, 0, width, height);
     const data = imageData.data;
@@ -124,7 +130,7 @@ export function applySettings(
     newCanvas.width = imageData.width;
     newCanvas.height = imageData.height;
 
-    const newCtx = newCanvas.getContext("2d");
+    const newCtx = newCanvas.getContext("2d", { willReadFrequently: true });
 
     newCtx?.putImageData(imageData, 0, 0);
 
@@ -132,7 +138,9 @@ export function applySettings(
     outputImage.src = newCanvas.toDataURL("image/png");
 
     outputImage.onload = () => {
-      const outputCtx = outputCanvas.getContext("2d");
+      const outputCtx = outputCanvas.getContext("2d", {
+        willReadFrequently: true,
+      });
       if (outputCtx) {
         outputCtx.drawImage(
           outputImage,
