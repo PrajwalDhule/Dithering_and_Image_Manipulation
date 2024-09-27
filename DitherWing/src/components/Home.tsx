@@ -33,7 +33,7 @@ function Home() {
         setOutputCanvas(_outputCanvas);
         setOriginalImage(_originalImage);
 
-        applySettings(_originalImage, _inputCanvas, _outputCanvas, 1);
+        applySettings(_originalImage, _inputCanvas, _outputCanvas, scale);
       };
     }
   }, [imageSrc]);
