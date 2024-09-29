@@ -21,10 +21,6 @@ import {
 
 const frameworks = [
   {
-    value: "none",
-    label: "None",
-  },
-  {
     value: "atkinson",
     label: "Atkinson",
   },
@@ -56,7 +52,7 @@ export const Combobox: React.FC<ComboboxProps> = ({
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="w-[240px] justify-between"
+          className="w-3/5 justify-between"
         >
           {algorithm
             ? frameworks.find((framework) => framework.value === algorithm)

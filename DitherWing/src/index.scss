@@ -54,9 +54,25 @@ input[type="range"]{
   }
 }
 
-// input[type="text"]{
-//   border: .5px solid var(--gray-outline-50);
-// }
+input[type="radio"]{
+  accent-color: hsl(var(--secondary-foreground));
+}
+
+input[type="color"] {
+	-webkit-appearance: none;
+  appearance: none;
+	border: none;
+  border-radius: .25rem;
+	width: 2.5rem;
+	height: 1.5rem;
+  cursor: pointer;
+}
+input[type="color"]::-webkit-color-swatch-wrapper {
+	padding: 0;
+}
+input[type="color"]::-webkit-color-swatch {
+	border: none;
+}
 
 @media (prefers-color-scheme: light) {
   :root {
@@ -73,6 +89,7 @@ input[type="range"]{
 
 @layer base {
   :root {
+    --text: rgb(228,228,228);
     --background: 0 0% 100%;
     --foreground: 240 10% 3.9%;
     --card: 0 0% 100%;

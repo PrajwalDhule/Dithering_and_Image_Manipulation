@@ -48,6 +48,9 @@ export default {
   				25: 'var(--gray-outline-25)',
   				50: 'var(--gray-outline-50)'
   			},
+			light: {
+				DEFAULT: 'var(--text)',
+			},
   			border: 'hsl(var(--border))',
   			input: 'hsl(var(--input))',
   			ring: 'hsl(var(--ring))',

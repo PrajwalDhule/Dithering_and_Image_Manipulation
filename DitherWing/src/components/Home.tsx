@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { applySettings } from "../functions/core";
 import { Combobox } from "./Combobox";
+import { Button } from "./ui/button";
+import { RadioButton } from "./ui/radiobutton";
 
 function Home() {
   const [scale, setScale] = useState<number>(1);
@@ -69,24 +71,55 @@ function Home() {
 
   return (
     <>
-      <div className="w-[92.5vw] flex justify-between items-center">
-        <div className="w-[30vw]">
-          <div className="grid grid-cols-2 gap-x-8 gap-y-8 mb-6">
+      <div className="w-[92.5vw] lg:flex justify-between items-start">
+        <div className="lg:w-[30vw]">
+          <div className="grid grid-cols-2 gap-x-8 gap-y-6 mb-6">
             <div className="col-span-2 flex flex-col justify-start items-start">
               <label
                 htmlFor="algorithm"
-                className="mb-3 text-white text-sm font-medium"
+                className="mb-3 text-text text-sm font-medium"
               >
                 Image url
               </label>
-              <input
-                type="text"
-                onChange={handleImageSrcChange}
-                id="algorithm"
-                className="col-span-2 w-3/5 bg-[#111] outline-none border-[1px] border-outline-25 focus:border-outline-50 border-solid rounded-md px-2 py-1"
-              />
+              <div className="w-full flex gap-4">
+                <input
+                  type="text"
+                  onChange={handleImageSrcChange}
+                  id="algorithm"
+                  className="col-span-2 w-3/5 bg-[#111] outline-none border-[1px] border-outline-25 focus:border-outline-50 border-solid rounded-md px-2 py-1"
+                />
+                <Button variant="outline" className="w-[8em]">
+                  Apply Image
+                </Button>
+              </div>
             </div>
-            <div className="col-span-2 h-[0.25px] bg-gray-800 m-block-2"></div>
+            <div className="col-span-2 flex justify-center items-center -mb-4 -mt-1 text-light">
+              <div className="w-1/5 h-[0.25px] bg-gray-800"></div>
+              <span className="mx-4">Or</span>
+              <div className="w-1/5 h-[0.25px] bg-gray-800"></div>
+            </div>
+            <div className="col-span-2">
+              <label
+                className="block mb-2 text-sm font-medium text-text"
+                htmlFor="small-size"
+              >
+                Upload Image
+              </label>
+              <div className="w-full flex gap-4">
+                <input
+                  className="block w-3/5 mb-2 text-sm p-1 text-text outline-none border-[1px] border-outline-25 focus:border-outline-50 border-solid rounded-md cursor-pointer bg-[#111]"
+                  id="small-size"
+                  type="file"
+                />
+                <Button variant="outline" className="w-[8em]">
+                  Apply Image
+                </Button>
+              </div>
+              <p className=" text-sm text-gray-500" id="file-input-help">
+                PNG, JPEG or JPG.
+              </p>
+            </div>
+            <div className="col-span-2 h-[0.25px] bg-gray-800"></div>
             <div className="col-span-2 flex flex-col justify-start items-start">
               <label className="mb-3 text-white text-sm font-medium">
                 Dithering Algorithm
@@ -95,7 +128,7 @@ function Home() {
             </div>
             <div>
               <div className="flex justify-between items-center mb-3 text-sm font-medium ">
-                <label htmlFor="no-of-colors" className="text-white">
+                <label htmlFor="no-of-colors" className="text-text">
                   No. of Colors
                 </label>
                 {noOfColors && (
@@ -117,7 +150,7 @@ function Home() {
             </div>
             <div>
               <div className="flex justify-between items-center mb-3 text-sm font-medium ">
-                <label htmlFor="scale-slider" className="text-white">
+                <label htmlFor="scale-slider" className="text-text">
                   Scale
                 </label>
                 {scale && (
@@ -137,9 +170,14 @@ function Home() {
                 className="h-[0.45em] w-full cursor-pointer"
               />
             </div>
+            <div className="col-span-2 flex justify-start gap-8">
+              <RadioButton text="Grayscale" value="grayscale" />
+              <RadioButton text="Tint" value="tint" />
+              <input type="color" />
+            </div>
           </div>
         </div>
-        <div className="flex justify-end gap-8 h-[85vh] w-[60vw]">
+        <div className="flex justify-end gap-8 h-[85vh] lg:w-[60vw]">
           <canvas
             className="max-w-[45%] h-auto object-contain"
             ref={outputCanvasRef}

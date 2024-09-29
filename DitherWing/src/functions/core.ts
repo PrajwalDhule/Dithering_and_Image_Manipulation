@@ -66,10 +66,8 @@ export function applySettings(
     for (let i = 0; i < data.length; i += 4) {
       // grayscale (2nd method)
       const filterVal = (data[i] + data[i + 1] + data[i + 2]) / 3;
-      const filterVals = [filterVal, filterVal, filterVal];
-      data[i] = filterVals[0];
-      data[i + 1] = filterVals[1];
-      data[i + 2] = filterVals[2];
+      data[i] = data[i + 1] = data[i + 2] = filterVal;
+
       // other color filter (tinting)
       //         const filterColor = [0, 0, 255]; // rgb format
       //         const r = data[i];
