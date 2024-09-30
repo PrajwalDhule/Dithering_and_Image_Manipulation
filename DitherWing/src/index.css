@@ -60,7 +60,7 @@ input[type=color] {
   border: none;
   border-radius: 0.25rem;
   width: 2.5rem;
-  height: 1.5rem;
+  height: 1.25rem;
   cursor: pointer;
 }
 
@@ -70,6 +70,14 @@ input[type=color]::-webkit-color-swatch-wrapper {
 
 input[type=color]::-webkit-color-swatch {
   border: none;
+}
+
+input[type=color]::-moz-color-swatch {
+  border: none;
+}
+
+.colorpick-eyedropper-input-trigger {
+  display: none;
 }
 
 @media (prefers-color-scheme: light) {
