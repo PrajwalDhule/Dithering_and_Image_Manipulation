@@ -3,7 +3,8 @@ interface RangeSliderProps {
   min: number;
   max: number;
   step: number;
-  onChangeFn: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onChangeFn: (event: string, ...args: string[]) => void;
+  onChangeFnArgs?: any[];
   id: string;
   title: string;
   showValue: number | string;
@@ -15,6 +16,7 @@ const RangeSlider = ({
   max,
   step,
   onChangeFn,
+  onChangeFnArgs,
   id,
   title,
   showValue,
@@ -35,9 +37,13 @@ const RangeSlider = ({
         min={`${min}`}
         max={`${max}`}
         step={`${step}`}
-        onChange={onChangeFn}
+        onChange={(e) => {
+          onChangeFnArgs
+            ? onChangeFn(e.target.value, ...onChangeFnArgs)
+            : onChangeFn(e.target.value);
+        }}
         id={id}
-        className="text-gray-400 h-[0.45em] w-full"
+        className="text-gray-400 h-[0.45em] w-full cursor-pointer"
       />
     </>
   );

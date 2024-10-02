@@ -54,6 +54,10 @@ input[type="range"]{
   }
 }
 
+input[type="checkbox"]{
+  accent-color: var(--text);
+}
+
 input[type="radio"]{
   accent-color: hsl(var(--secondary-foreground));
 }

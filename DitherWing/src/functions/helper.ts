@@ -1,3 +1,5 @@
+import { useRef } from "react";
+
 export function rgbToHsl(r: number, g: number, b: number) {
   r /= 255;
   g /= 255;
@@ -22,7 +24,7 @@ export function rgbToHsl(r: number, g: number, b: number) {
       case g:
         h = (b - r) / d + 2;
         break;
-      case b:
+      default: // covers case b
         h = (r - g) / d + 4;
         break;
     }
@@ -81,3 +83,15 @@ export function hexToRgb(hex: string) {
       }
     : null;
 }
+
+export const useDebounce = (func: Function, delay: number) => {
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  return (...args: any) => {
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+
+    timeoutRef.current = setTimeout(() => {
+      func(...args);
+    }, delay);
+  };
+};

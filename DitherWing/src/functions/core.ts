@@ -1,4 +1,5 @@
 import { SettingsData } from "@/models/Settings";
+import { hexToRgb, hslToRgb, rgbToHsl } from "./helper";
 
 export function getClosestColor(r: number, g: number, b: number, factor = 1) {
   r = Math.round((factor * r) / 255) * Math.floor(255 / factor);
@@ -17,8 +18,10 @@ export function diffuseError(
   errorG: number,
   errorB: number,
   errorPercent: number,
-  data: Uint8ClampedArray
+  data: Uint8ClampedArray,
+  noise: number = 1
 ) {
+  errorPercent *= noise;
   data[index] = Math.round(data[index] + errorR * errorPercent);
   data[index + 1] = Math.round(data[index + 1] + errorG * errorPercent);
   data[index + 2] = Math.round(data[index + 2] + errorB * errorPercent);
@@ -30,6 +33,7 @@ export function applySettings(
   outputCanvas: HTMLCanvasElement,
   settings: SettingsData
 ) {
+  console.log("applying settings");
   inputCanvas.width = Math.round(originalImage.width * settings.scale);
   inputCanvas.height = Math.round(originalImage.height * settings.scale);
 
@@ -60,28 +64,29 @@ export function applySettings(
     const data = imageData.data;
 
     for (let i = 0; i < data.length; i += 4) {
-      // grayscale (2nd method)
       if (settings.imageFilterMode === "grayscale") {
         const filterVal = (data[i] + data[i + 1] + data[i + 2]) / 3;
         data[i] = data[i + 1] = data[i + 2] = filterVal;
+      } else if (settings.imageFilterMode === "tint") {
+        const filterColor = hexToRgb(settings.tint);
+        if (filterColor) {
+          const r = data[i];
+          const g = data[i + 1];
+          const b = data[i + 2];
+          let [tintColorH, tintColorS, tintColorL] = rgbToHsl(
+            filterColor.r,
+            filterColor.g,
+            filterColor.b
+          );
+          let [h, s, l] = rgbToHsl(r, g, b);
+          h = tintColorH;
+          s = s + tintColorS * (1 - s); // Increase saturation towards the tint
+          const [newR, newG, newB] = hslToRgb(h, s, l);
+          data[i] = newR;
+          data[i + 1] = newG;
+          data[i + 2] = newB;
+        }
       }
-      // other color filter (tinting)
-      //         const filterColor = [0, 0, 255]; // rgb format
-      //         const r = data[i];
-      //         const g = data[i + 1];
-      //         const b = data[i + 2];
-      //         let [tintColorH, tintColorS, tintColorL] = rgbToHsl(
-      //           filterColor[0],
-      //           filterColor[1],
-      //           filterColor[2]
-      //         );
-      //         let [h, s, l] = rgbToHsl(r, g, b);
-      //         h = tintColorH;
-      //         s = s + tintColorS * (1 - s); // Increase saturation towards the tint
-      //         const [newR, newG, newB] = hslToRgb(h, s, l);
-      //         data[i] = newR;
-      //         data[i + 1] = newG;
-      //         data[i + 2] = newB;
     }
 
     if (settings.algorithm === "bayer") {
@@ -136,55 +141,107 @@ export function applySettings(
 
         // Floyd-Steinberg Dithering
         if (settings.algorithm === "floydsteinberg") {
-          diffuseError(i + 4, errorR, errorG, errorB, 70 / 160, data);
+          diffuseError(
+            i + 4,
+            errorR,
+            errorG,
+            errorB,
+            70 / 160,
+            data,
+            settings.noise
+          );
           diffuseError(
             i + (width - 1) * 4,
             errorR,
             errorG,
             errorB,
             30 / 160,
-            data
+            data,
+            settings.noise
           );
-          diffuseError(i + width * 4, errorR, errorG, errorB, 50 / 160, data);
+          diffuseError(
+            i + width * 4,
+            errorR,
+            errorG,
+            errorB,
+            50 / 160,
+            data,
+            settings.noise
+          );
           diffuseError(
             i + (width + 1) * 4,
             errorR,
             errorG,
             errorB,
             10 / 160,
-            data
+            data,
+            settings.noise
           );
         }
 
         // Atkinson Dithering
         if (settings.algorithm === "atkinson") {
-          diffuseError(i + 4, errorR, errorG, errorB, 10 / 80, data);
+          diffuseError(
+            i + 4,
+            errorR,
+            errorG,
+            errorB,
+            10 / 80,
+            data,
+            settings.noise
+          );
           diffuseError(
             i + (width - 1) * 4,
             errorR,
             errorG,
             errorB,
             10 / 80,
-            data
+            data,
+            settings.noise
           );
-          diffuseError(i + width * 4, errorR, errorG, errorB, 10 / 80, data);
+          diffuseError(
+            i + width * 4,
+            errorR,
+            errorG,
+            errorB,
+            10 / 80,
+            data,
+            settings.noise
+          );
           diffuseError(
             i + (width + 1) * 4,
             errorR,
             errorG,
             errorB,
             10 / 80,
-            data
+            data,
+            settings.noise
           );
-          diffuseError(i + width * 8, errorR, errorG, errorB, 10 / 80, data);
-          diffuseError(i + 8, errorR, errorG, errorB, 10 / 80, data);
+          diffuseError(
+            i + width * 8,
+            errorR,
+            errorG,
+            errorB,
+            10 / 80,
+            data,
+            settings.noise
+          );
+          diffuseError(
+            i + 8,
+            errorR,
+            errorG,
+            errorB,
+            10 / 80,
+            data,
+            settings.noise
+          );
         }
       }
     }
 
     // scalePixels to create a dark lighting effect
 
-    // let dataCopy = [...data];
+    // let dataCopy = JSON.parse(JSON.stringify(data));
 
     // for (let i = (width + 1) * 4; i < data.length; i += 4) {
     //   const x = (i / 4) % width;

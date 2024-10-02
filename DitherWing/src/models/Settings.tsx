@@ -1,9 +1,10 @@
 export interface SettingsData {
-  imageSrc: string;
   algorithm: string;
-  imageFilterMode: string;
+  noise: number;
   noOfColors: number;
   scale: number;
+  imageFilterMode: string;
+  tint: string;
   blur: number;
   brightness: number;
   contrast: number;

@@ -39,13 +39,15 @@ const frameworks = [
 ];
 
 export interface ComboboxProps {
-  algorithm: string;
-  setAlgorithm: (newValue: string) => void;
+  value: string;
+  onSelectFn: Function;
+  onSelectFnArgs?: string[];
 }
 
 export const Combobox: React.FC<ComboboxProps> = ({
-  algorithm,
-  setAlgorithm,
+  value,
+  onSelectFn,
+  onSelectFnArgs,
 }) => {
   const [open, setOpen] = React.useState(false);
 
@@ -56,11 +58,10 @@ export const Combobox: React.FC<ComboboxProps> = ({
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="w-3/5 justify-between"
+          className="w-full justify-between"
         >
-          {algorithm
-            ? frameworks.find((framework) => framework.value === algorithm)
-                ?.label
+          {value
+            ? frameworks.find((framework) => framework.value === value)?.label
             : "Select framework..."}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
@@ -76,18 +77,17 @@ export const Combobox: React.FC<ComboboxProps> = ({
                   key={framework.value}
                   value={framework.value}
                   onSelect={(currentValue) => {
-                    setAlgorithm(
-                      currentValue === algorithm ? "" : currentValue
-                    );
+                    const val = currentValue === value ? "" : currentValue;
+                    onSelectFnArgs
+                      ? onSelectFn(val, ...onSelectFnArgs)
+                      : onSelectFn(val);
                     setOpen(false);
                   }}
                 >
                   <Check
                     className={cn(
                       "mr-2 h-4 w-4",
-                      algorithm === framework.value
-                        ? "opacity-100"
-                        : "opacity-0"
+                      value === framework.value ? "opacity-100" : "opacity-0"
                     )}
                   />
                   {framework.label}

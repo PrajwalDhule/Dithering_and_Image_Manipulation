@@ -49,6 +49,10 @@ input[type=range]::-ms-thumb {
   box-shadow: inset 0 0 100px #09090B;
 }
 
+input[type=checkbox] {
+  accent-color: var(--text);
+}
+
 input[type=radio] {
   accent-color: hsl(var(--secondary-foreground));
 }
