@@ -36,6 +36,18 @@ const frameworks = [
     value: "bayer",
     label: "Bayer",
   },
+  {
+    value: "quantize",
+    label: "Quantized (no dither)",
+  },
+  {
+    value: "atkinson-no-quantize",
+    label: "Atkinson (no quantize)",
+  },
+  {
+    value: "floydsteinberg-no-quantize",
+    label: "Floyd-Steinberg (no quantize)",
+  },
 ];
 
 export interface ComboboxProps {

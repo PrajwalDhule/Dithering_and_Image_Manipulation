@@ -49,7 +49,10 @@ function Home() {
     }
   };
 
-  const handleValueChangeDebounced = useDebounce(handleValueChange, 10);
+  const handleValueChangeDebounced = useDebounce(handleValueChange, 5);
+  // const handleValueChangeDebounced = handleValueChange;
+
+  const applySettingsDebounced = useDebounce(applySettings, 200);
 
   const handleRadioChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSettings((prevSettings) => ({
@@ -127,7 +130,12 @@ function Home() {
 
   useEffect(() => {
     if (originalImage && inputCanvas && outputCanvas) {
-      applySettings(originalImage, inputCanvas, outputCanvas, settings);
+      applySettingsDebounced(
+        originalImage,
+        inputCanvas,
+        outputCanvas,
+        settings
+      );
     }
   }, [settings]);
 
@@ -221,21 +229,55 @@ function Home() {
                   onSelectFnArgs={["algorithm"]}
                 />
               </div>
-              <div className="ml-4">
+              <div className="relative ml-4">
                 <RangeSlider
                   value={settings.noise}
                   min={1}
                   max={10}
                   step={0.1}
-                  onChangeFn={handleValueChangeDebounced}
+                  onChangeFn={handleValueChange}
                   onChangeFnArgs={["noise"]}
                   id="noise-slider"
                   title="Noise"
                   showValue={settings.noise}
                 />
+
+                <button
+                  data-tooltip-target="tooltip-noise"
+                  type="button"
+                  className="tooltip-button absolute top-0 left-[3.75em] p-0 m-0 text-xs text-center font-bold text-black bg-muted-foreground h-[1.5em] aspect-square rounded-[50%]"
+                >
+                  <div
+                    id="tooltip-noise"
+                    role="tooltip"
+                    className="absolute hidden opacity-0 z-10 top-0 left-0 -translate-x-[60%] lg:-translate-x-[50%] -translate-y-[125%] w-[30ch] px-3 py-2 text-sm lg:text-xs text-start font-normal text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm tooltip"
+                  >
+                    Changes might be slower for very large images and scale
+                    values. Only works with error based algorithms (eg: Atkinson
+                    and Floyd-Steinberg)
+                  </div>
+                  <div>i</div>
+                </button>
+
+                {/*
+                 */}
               </div>
             </div>
-            <div>
+            <div className="relative">
+              <button
+                data-tooltip-target="tooltip-scale"
+                type="button"
+                className="tooltip-button absolute top-0 left-[8em] p-0 m-0 text-xs text-center font-bold text-black bg-muted-foreground h-[1.5em] aspect-square rounded-[50%]"
+              >
+                <div
+                  id="tooltip-scale"
+                  role="tooltip"
+                  className="absolute hidden opacity-0 z-10 top-0 left-0 -translate-x-[60%] lg:-translate-x-[50%] -translate-y-[125%] w-[30ch] px-3 py-2 text-sm lg:text-xs text-start font-normal text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm tooltip"
+                >
+                  Does not work with ordered algorithms (eg: Bayer).
+                </div>
+                <div>i</div>
+              </button>
               <RangeSlider
                 value={settings.noOfColors}
                 min={2}
@@ -248,12 +290,26 @@ function Home() {
                 showValue={settings.noOfColors}
               />
             </div>
-            <div>
+            <div className="relative">
+              <button
+                data-tooltip-target="tooltip-scale"
+                type="button"
+                className="tooltip-button absolute top-0 left-[3.5em] p-0 m-0 text-xs text-center font-bold text-black bg-muted-foreground h-[1.5em] aspect-square rounded-[50%]"
+              >
+                <div
+                  id="tooltip-scale"
+                  role="tooltip"
+                  className="absolute hidden opacity-0 z-10 top-0 left-0 -translate-x-[60%] lg:-translate-x-[50%] -translate-y-[125%] w-[30ch] px-3 py-2 text-sm lg:text-xs text-start font-normal text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm tooltip"
+                >
+                  Changes might be slower for very large images.
+                </div>
+                <div>i</div>
+              </button>
               <RangeSlider
                 value={settings.scale}
-                min={0.01}
+                min={0.05}
                 max={1}
-                step={0.01}
+                step={0.05}
                 onChangeFn={handleValueChangeDebounced}
                 onChangeFnArgs={["scale"]}
                 id="scale-slider"

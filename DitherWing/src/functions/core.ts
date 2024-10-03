@@ -33,7 +33,6 @@ export function applySettings(
   outputCanvas: HTMLCanvasElement,
   settings: SettingsData
 ) {
-  console.log("applying settings");
   inputCanvas.width = Math.round(originalImage.width * settings.scale);
   inputCanvas.height = Math.round(originalImage.height * settings.scale);
 
@@ -96,7 +95,7 @@ export function applySettings(
 
         if (x === width - 1 || y === height - 1) continue;
 
-        // Bayer ordered dithering (also need to exclude getClosestColor and error considerations as this is not an error method)
+        // Bayer ordered dithering (needs exclusion of getClosestColor and error considerations as this is not an error method)
         const thresholdMat = [
           [21, 37, 25, 41, 22, 38, 26, 42],
           [53, 5, 57, 9, 54, 6, 58, 10],
@@ -135,12 +134,14 @@ export function applySettings(
         const errorR = data[i] - r;
         const errorG = data[i + 1] - g;
         const errorB = data[i + 2] - b;
-        data[i] = r;
-        data[i + 1] = g;
-        data[i + 2] = b;
+        if (!settings.algorithm.includes("no-quantize")) {
+          data[i] = r;
+          data[i + 1] = g;
+          data[i + 2] = b;
+        }
 
         // Floyd-Steinberg Dithering
-        if (settings.algorithm === "floydsteinberg") {
+        if (settings.algorithm.includes("floydsteinberg")) {
           diffuseError(
             i + 4,
             errorR,
@@ -180,7 +181,7 @@ export function applySettings(
         }
 
         // Atkinson Dithering
-        if (settings.algorithm === "atkinson") {
+        if (settings.algorithm.includes("atkinson")) {
           diffuseError(
             i + 4,
             errorR,
