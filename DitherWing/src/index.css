@@ -36,12 +36,7 @@ svg.arrow-up {
 }
 
 .arrow-up {
-  transform: rotate(0deg);
   transition: transform 0.25s;
-}
-
-.arrow-collapsed {
-  transform: rotate(180deg);
 }
 
 input[type=range] {
@@ -101,6 +96,28 @@ input[type=color]::-moz-color-swatch {
 .tooltip-button:hover .tooltip {
   display: block;
   opacity: 1;
+}
+
+.settings::-webkit-scrollbar, .canvas-zoomed::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+  background: transparent;
+}
+.settings::-webkit-scrollbar-track, .canvas-zoomed::-webkit-scrollbar-track {
+  border-radius: 100vw;
+  background: transparent;
+}
+.settings::-webkit-scrollbar-thumb, .canvas-zoomed::-webkit-scrollbar-thumb {
+  border-radius: 100vw;
+  background: var(--gray-outline-25);
+}
+.settings::-webkit-scrollbar-thumb:hover, .canvas-zoomed::-webkit-scrollbar-thumb:hover {
+  background: var(--gray-outline-50);
+}
+@supports (scrollbar-color: red blue) {
+  .settings *, .canvas-zoomed * {
+    scrollbar-color: #666af6 #030246;
+  }
 }
 
 @media (prefers-color-scheme: light) {

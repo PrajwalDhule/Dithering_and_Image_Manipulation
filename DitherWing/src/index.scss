@@ -2,6 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
+$dark-blue: #030246;
+$dark-blue-2: #020236;
+$blue: #140997;
+$light-blue: #666af6;
+$light-blue-2: #4a50f8;
+$light-blue-3: rgb(10, 15, 171);
+
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -15,6 +22,7 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  
 }
 
 *{
@@ -39,12 +47,7 @@ svg.arrow-up{
 }
 
 .arrow-up{
-  transform: rotate(0deg);
   transition: transform .25s;  
-}
-
-.arrow-collapsed{
-  transform: rotate(180deg);
 }
 
 input[type="range"]{
@@ -104,6 +107,36 @@ input[type="color"]::-moz-color-swatch {
     .tooltip{
       display: block;
       opacity: 1;
+    }
+  }
+}
+
+.settings, .canvas-zoomed{
+  &::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-track {
+    border-radius: 100vw;
+    // margin-top: 18px;
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    // border: 1px solid $light-blue-3;
+    border-radius: 100vw;
+    background: var(--gray-outline-25);
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: var(--gray-outline-50);
+  }
+
+  @supports (scrollbar-color: red blue) {
+    * {
+      scrollbar-color: $light-blue $dark-blue;
     }
   }
 }
