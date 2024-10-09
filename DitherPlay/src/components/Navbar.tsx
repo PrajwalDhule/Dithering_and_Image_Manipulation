@@ -12,7 +12,7 @@ export const Navbar = ({ setIsImageZoomMode, exportImage }: NavbarProps) => {
       <div>
         <img src={Logo} alt="DitherPlay logo" className="h-[2.5em]" />
       </div>
-      <div className="flex justify-end items-center gap-x-8">
+      <div className="flex justify-end items-center gap-x-4 lg:gap-x-8">
         <label className="inline-flex items-center cursor-pointer">
           <input
             type="checkbox"
