@@ -9,10 +9,9 @@ import { SettingsData } from "@/models/Settings";
 import { useDebounce } from "@/functions/helper";
 import { ArrowUpSvg } from "./assets/ArrowUpSvg";
 import { Navbar } from "./Navbar";
+import defaultInputImage from "./assets/default_input_image.jpg";
 
 function Home() {
-  const defaultImageUrl =
-    "https://i.postimg.cc/sXrgJtX5/imageedit-4-6675048281.jpg";
   const [settings, setSettings] = useState<SettingsData>({
     algorithm: "atkinson",
     noise: 1,
@@ -60,7 +59,6 @@ function Home() {
   };
 
   const handleValueChangeDebounced = useDebounce(handleValueChange, 5);
-  // const handleValueChangeDebounced = handleValueChange;
 
   const applySettingsDebounced = useDebounce(applySettings, 200);
 
@@ -128,7 +126,7 @@ function Home() {
   useEffect(() => {
     const _originalImage = new Image();
     _originalImage.crossOrigin = "anonymous";
-    _originalImage.src = defaultImageUrl;
+    _originalImage.src = defaultInputImage;
 
     _originalImage.onload = () => {
       setOriginalImage(_originalImage);
