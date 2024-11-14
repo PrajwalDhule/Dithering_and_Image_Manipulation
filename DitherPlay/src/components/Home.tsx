@@ -416,7 +416,7 @@ function Home() {
                         <div
                           id="tooltip-scale"
                           role="tooltip"
-                          className="absolute hidden opacity-0 z-10 top-0 left-0 -translate-x-[60%] lg:-translate-x-[50%] -translate-y-[125%] w-[30ch] px-3 py-2 text-sm lg:text-xs text-start font-normal text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm tooltip"
+                          className="absolute hidden opacity-0 z-10 top-0 left-0 -translate-x-[40%] lg:-translate-x-[50%] -translate-y-[125%] w-[30ch] px-3 py-2 text-sm lg:text-xs text-start font-normal text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm tooltip"
                         >
                           Does not work with ordered algorithms (eg: Bayer).
                         </div>
