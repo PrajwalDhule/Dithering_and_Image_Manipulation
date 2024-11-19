@@ -18,46 +18,18 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-
-const frameworks = [
-  {
-    value: "none",
-    label: "None",
-  },
-  {
-    value: "atkinson",
-    label: "Atkinson",
-  },
-  {
-    value: "floydsteinberg",
-    label: "Floyd-Steinberg",
-  },
-  {
-    value: "bayer",
-    label: "Bayer",
-  },
-  {
-    value: "quantize",
-    label: "Quantized (no dither)",
-  },
-  {
-    value: "atkinson-no-quantize",
-    label: "Atkinson (no quantize)",
-  },
-  {
-    value: "floydsteinberg-no-quantize",
-    label: "Floyd-Steinberg (no quantize)",
-  },
-];
+import { OptionsData } from "@/models/Options";
 
 export interface ComboboxProps {
   value: string;
+  options: OptionsData;
   onSelectFn: Function;
   onSelectFnArgs?: string[];
 }
 
 export const Combobox: React.FC<ComboboxProps> = ({
   value,
+  options,
   onSelectFn,
   onSelectFnArgs,
 }) => {
@@ -70,10 +42,11 @@ export const Combobox: React.FC<ComboboxProps> = ({
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="w-full justify-between"
+          className="h-8 w-full justify-between"
         >
           {value
-            ? frameworks.find((framework) => framework.value === value)?.label
+            ? options.options.find((framework) => framework.value === value)
+                ?.label
             : "Select framework..."}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
@@ -84,7 +57,7 @@ export const Combobox: React.FC<ComboboxProps> = ({
           <CommandList>
             <CommandEmpty>No framework found.</CommandEmpty>
             <CommandGroup>
-              {frameworks.map((framework) => (
+              {options.options.map((framework) => (
                 <CommandItem
                   key={framework.value}
                   value={framework.value}

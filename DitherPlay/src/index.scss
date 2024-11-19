@@ -111,9 +111,9 @@ input[type="color"]::-moz-color-swatch {
   }
 }
 
-.settings, .canvas-zoomed{
+.settings, .settings-section, .canvas-zoomed{
   &::-webkit-scrollbar {
-    width: 8px;
+    width: 4px;
     height: 8px;
     background: transparent;
   }
@@ -134,11 +134,10 @@ input[type="color"]::-moz-color-swatch {
     background: var(--gray-outline-50);
   }
 
-  @supports (scrollbar-color: red blue) {
-    * {
-      scrollbar-color: $light-blue $dark-blue;
-    }
-  }
+}
+
+.a{
+  background-color: #484e66;
 }
 
 @media (prefers-color-scheme: light) {

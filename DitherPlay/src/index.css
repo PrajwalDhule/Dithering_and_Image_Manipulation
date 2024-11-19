@@ -98,26 +98,25 @@ input[type=color]::-moz-color-swatch {
   opacity: 1;
 }
 
-.settings::-webkit-scrollbar, .canvas-zoomed::-webkit-scrollbar {
-  width: 8px;
+.settings::-webkit-scrollbar, .settings-section::-webkit-scrollbar, .canvas-zoomed::-webkit-scrollbar {
+  width: 4px;
   height: 8px;
   background: transparent;
 }
-.settings::-webkit-scrollbar-track, .canvas-zoomed::-webkit-scrollbar-track {
+.settings::-webkit-scrollbar-track, .settings-section::-webkit-scrollbar-track, .canvas-zoomed::-webkit-scrollbar-track {
   border-radius: 100vw;
   background: transparent;
 }
-.settings::-webkit-scrollbar-thumb, .canvas-zoomed::-webkit-scrollbar-thumb {
+.settings::-webkit-scrollbar-thumb, .settings-section::-webkit-scrollbar-thumb, .canvas-zoomed::-webkit-scrollbar-thumb {
   border-radius: 100vw;
   background: var(--gray-outline-25);
 }
-.settings::-webkit-scrollbar-thumb:hover, .canvas-zoomed::-webkit-scrollbar-thumb:hover {
+.settings::-webkit-scrollbar-thumb:hover, .settings-section::-webkit-scrollbar-thumb:hover, .canvas-zoomed::-webkit-scrollbar-thumb:hover {
   background: var(--gray-outline-50);
 }
-@supports (scrollbar-color: red blue) {
-  .settings *, .canvas-zoomed * {
-    scrollbar-color: #666af6 #030246;
-  }
+
+.a {
+  background-color: #484e66;
 }
 
 @media (prefers-color-scheme: light) {

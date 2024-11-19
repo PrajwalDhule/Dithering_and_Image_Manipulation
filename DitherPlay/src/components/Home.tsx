@@ -10,13 +10,15 @@ import { useDebounce } from "@/functions/helper";
 import { ArrowUpSvg } from "./assets/ArrowUpSvg";
 import { Navbar } from "./Navbar";
 import defaultInputImage from "./assets/default_input_image.jpg";
+import { OptionsData } from "@/models/Options";
 
 function Home() {
+  const [preset, setPreset] = useState<string>("default");
   const [settings, setSettings] = useState<SettingsData>({
     algorithm: "atkinson",
     noise: 1,
     noOfColors: 2,
-    scale: 1,
+    scale: 0.6,
     imageFilterMode: "grayscale",
     tint: "#3d85c6",
     blur: 0,
@@ -43,6 +45,113 @@ function Home() {
     inputImage: false,
     outputImage: false,
   });
+
+  const algorithmOptions: OptionsData = {
+    options: [
+      {
+        value: "none",
+        label: "None",
+      },
+      {
+        value: "atkinson",
+        label: "Atkinson",
+      },
+      {
+        value: "floydsteinberg",
+        label: "Floyd-Steinberg",
+      },
+      {
+        value: "bayer",
+        label: "Bayer",
+      },
+      {
+        value: "quantize",
+        label: "Quantized (no dither)",
+      },
+      {
+        value: "atkinson-no-quantize",
+        label: "Atkinson (no quantize)",
+      },
+      {
+        value: "floydsteinberg-no-quantize",
+        label: "Floyd-Steinberg (no quantize)",
+      },
+    ],
+  };
+
+  const presetOptions: OptionsData = {
+    options: [
+      {
+        value: "default",
+        label: "Default",
+      },
+      {
+        value: "preset 1",
+        label: "Preset 1",
+      },
+      {
+        value: "preset 2",
+        label: "Preset 2",
+      },
+    ],
+  };
+
+  const handlePresetValueChange = (presetValue: string): void => {
+    setPreset(presetValue);
+    switch (presetValue) {
+      case "preset 1":
+        setSettings({
+          algorithm: "quantize",
+          noise: 1,
+          noOfColors: 2,
+          scale: 1,
+          imageFilterMode: "grayscale",
+          tint: "#3d85c6",
+          blur: 0,
+          brightness: 100,
+          contrast: 100,
+          hueRotate: 0,
+          invert: 0,
+          opacity: 100,
+          sepia: 0,
+        });
+        break;
+      case "preset 2":
+        setSettings({
+          algorithm: "quantize",
+          noise: 1,
+          noOfColors: 11,
+          scale: 1,
+          imageFilterMode: "grayscale",
+          tint: "#3d85c6",
+          blur: 0,
+          brightness: 100,
+          contrast: 100,
+          hueRotate: 0,
+          invert: 0,
+          opacity: 100,
+          sepia: 0,
+        });
+        break;
+      default:
+        setSettings({
+          algorithm: "atkinson",
+          noise: 1,
+          noOfColors: 2,
+          scale: 0.6,
+          imageFilterMode: "grayscale",
+          tint: "#3d85c6",
+          blur: 0,
+          brightness: 100,
+          contrast: 100,
+          hueRotate: 0,
+          invert: 0,
+          opacity: 100,
+          sepia: 0,
+        });
+        break;
+    }
+  };
 
   const handleValueChange = (eventValue: string, settingsKey: string): void => {
     if (settingsKey in settings) {
@@ -110,7 +219,7 @@ function Home() {
       algorithm: "atkinson",
       noise: 1,
       noOfColors: 2,
-      scale: 1,
+      scale: 0.6,
       imageFilterMode: "grayscale",
       tint: "#3d85c6",
       blur: 0,
@@ -270,9 +379,35 @@ function Home() {
             </div>
           </div>
 
-          <div className="lg:w-[35vw] lg:h-[85vh] lg:overflow-auto lg:pl-1 lg:pr-6 mt-8 lg:mt-0 settings">
-            <div className="flex flex-col gap-0 mb-6">
-              <div className="flex justify-between items-center text-white text-base font-medium segment-title">
+          <div className="lg:w-[35vw] lg:h-[85vh] mt-8 lg:mt-0 settings">
+            <div className="flex justify-between items-center text-white font-medium segment-title">
+              <div className="flex justify-between items-center">
+                <div className="h-2 w-2 rounded-[50%] mr-2 bg-gray-300"></div>
+                <h2 className="text-xl">Settings</h2>
+              </div>
+              <Button
+                variant="outline"
+                className="px-3 h-8 ml-auto mr-4"
+                onClick={() => resetSettings()}
+              >
+                Reset
+              </Button>
+              <div className="flex justify-end items-stretch w-1/2 lg:w-[45%] text-base rounded-md bg-[#2a2a2a]">
+                <div className="flex justify-center items-center flex-1 rounded-s-md px-3 text-sm text-[#ccc]">
+                  Preset
+                </div>
+                <Combobox
+                  value={preset}
+                  options={presetOptions}
+                  onSelectFn={handlePresetValueChange}
+                />
+              </div>
+            </div>
+
+            <Divider classNames="my-6" />
+
+            <div className="flex flex-col gap-0 mb-6 lg:h-[70vh] lg:pl-1 lg:pr-4 lg:overflow-auto settings-section">
+              <div className="flex justify-between items-center text-white text-base font-medium segment-title p-3 bg-[#222] rounded-md">
                 <h3>Select Input image</h3>
                 <button
                   className="bg-transparent p-0"
@@ -288,7 +423,7 @@ function Home() {
                 </button>
               </div>
               {!collapsedSections.inputImageField && (
-                <div className="grid grid-cols-1 gap-x-8 gap-y-6 mt-6">
+                <div className="grid grid-cols-1 gap-x-8 gap-y-6 p-3 mt-2 bg-[#222] rounded-md">
                   <div className="flex flex-col justify-start items-start">
                     <label
                       htmlFor="input-image-url"
@@ -301,7 +436,7 @@ function Home() {
                         type="text"
                         ref={imageUrlInputRef}
                         id="input-image-url"
-                        className="col-span-2 w-3/5 bg-[#111] outline-none border-[1px] border-outline-25 focus:border-outline-50 border-solid rounded-md px-2 py-1"
+                        className="col-span-2 w-3/5 bg-[#1a1a1a] outline-none border-[1px] border-outline-25 focus:border-outline-50 border-solid rounded-md px-2 py-1"
                       />
                       <Button
                         variant="outline"
@@ -326,7 +461,7 @@ function Home() {
                     </label>
                     <div className="w-full flex gap-4">
                       <input
-                        className="block w-3/5 mb-2 text-sm p-1 text-text outline-none border-[1px] border-outline-25 focus:border-outline-50 border-solid rounded-md cursor-pointer bg-[#111]"
+                        className="block w-3/5 mb-2 text-sm p-1 text-text outline-none border-[1px] border-outline-25 focus:border-outline-50 border-solid rounded-md cursor-pointer bg-[#1a1a1a]"
                         id="input-image-file"
                         ref={imageFileInputRef}
                         type="file"
@@ -349,7 +484,7 @@ function Home() {
 
               <Divider classNames="mt-6" />
 
-              <div className="flex justify-between items-center mt-6 text-white text-base font-medium segment-title">
+              <div className="flex justify-between items-center text-white text-base font-medium segment-title p-3 bg-[#222] rounded-md">
                 <h3>Main settings</h3>
                 <button
                   className="bg-transparent p-0"
@@ -364,7 +499,7 @@ function Home() {
               </div>
               {!collapsedSections.mainSettings && (
                 <div>
-                  <div className="grid grid-cols-2 gap-x-8 gap-y-6 mt-10">
+                  <div className="grid grid-cols-2 gap-x-8 gap-y-6 p-4 mt-2 bg-[#222] rounded-md">
                     <div className="col-span-2 flex justify-between items-start">
                       <div className="flex flex-col w-3/5">
                         <label className="mb-3 text-white text-sm font-medium">
@@ -372,6 +507,7 @@ function Home() {
                         </label>
                         <Combobox
                           value={settings.algorithm}
+                          options={algorithmOptions}
                           onSelectFn={handleValueChange}
                           onSelectFnArgs={["algorithm"]}
                         />
@@ -498,7 +634,7 @@ function Home() {
 
               <Divider classNames="mt-6" />
 
-              <div className="flex justify-between items-center mt-6 text-white text-base font-medium segment-title">
+              <div className="flex justify-between items-center p-3  bg-[#222] rounded-md text-white text-base font-medium segment-title">
                 <h3>More filters</h3>
                 <button
                   className="bg-transparent p-0"
@@ -512,7 +648,7 @@ function Home() {
                 </button>
               </div>
               {!collapsedSections.moreFilters && (
-                <div className="grid grid-cols-2 gap-x-8 gap-y-6 mt-10">
+                <div className="grid grid-cols-2 gap-x-8 gap-y-6 p-4 mt-2 bg-[#222] rounded-md">
                   <div>
                     <RangeSlider
                       value={settings.blur}
@@ -614,13 +750,13 @@ function Home() {
                 </div>
               )}
 
-              <Button
+              {/* <Button
                 variant="outline"
                 className="w-[6em] mt-4 self-end"
                 onClick={() => resetSettings()}
               >
                 Reset
-              </Button>
+              </Button> */}
 
               <a
                 href="https://www.producthunt.com/posts/ditherplay?embed=true&utm_source=badge-featured&utm_medium=badge&utm_souce=badge-ditherplay"
