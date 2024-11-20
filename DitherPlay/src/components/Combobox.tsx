@@ -23,6 +23,8 @@ import { OptionsData } from "@/models/Options";
 export interface ComboboxProps {
   value: string;
   options: OptionsData;
+  variant?: "outline" | "link" | "default" | "destructive" | "secondary" | "gradient" | "ghost";
+  size?: "default" | "medium" | "thin" | "thin_medium" | "sm" | "lg" | "icon";
   onSelectFn: Function;
   onSelectFnArgs?: string[];
 }
@@ -30,6 +32,8 @@ export interface ComboboxProps {
 export const Combobox: React.FC<ComboboxProps> = ({
   value,
   options,
+  variant = "outline",
+  size = "default",
   onSelectFn,
   onSelectFnArgs,
 }) => {
@@ -39,10 +43,11 @@ export const Combobox: React.FC<ComboboxProps> = ({
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button
-          variant="outline"
+          variant={variant}
+          size={size}
           role="combobox"
           aria-expanded={open}
-          className="h-8 w-full justify-between"
+          className="w-full justify-between tracking-wide"
         >
           {value
             ? options.options.find((framework) => framework.value === value)

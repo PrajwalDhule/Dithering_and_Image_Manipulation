@@ -41,7 +41,8 @@ export const Navbar = ({ setIsImageZoomMode, exportImage }: NavbarProps) => {
           </span>
         </label>
         <Button
-          variant="outline"
+          variant="gradient"
+          size="medium"
           className="w-[6em] self-end"
           onClick={() => exportImage()}
         >

@@ -386,7 +386,8 @@ function Home() {
                 <h2 className="text-xl">Settings</h2>
               </div>
               <Button
-                variant="outline"
+                variant="basic"
+                size="thin_medium"
                 className="px-3 h-8 ml-auto mr-4"
                 onClick={() => resetSettings()}
               >
@@ -398,6 +399,8 @@ function Home() {
                 </div>
                 <Combobox
                   value={preset}
+                  variant="gradient"
+                  size="thin"
                   options={presetOptions}
                   onSelectFn={handlePresetValueChange}
                 />
@@ -423,7 +426,7 @@ function Home() {
                 </button>
               </div>
               {!collapsedSections.inputImageField && (
-                <div className="grid grid-cols-1 gap-x-8 gap-y-6 p-3 mt-2 bg-[#222] rounded-md">
+                <div className="grid grid-cols-1 gap-x-8 gap-y-3 p-3 mt-2 bg-[#222] rounded-md">
                   <div className="flex flex-col justify-start items-start">
                     <label
                       htmlFor="input-image-url"
@@ -447,10 +450,10 @@ function Home() {
                       </Button>
                     </div>
                   </div>
-                  <div className="flex justify-center items-center -mb-4 -mt-1 text-light">
-                    <div className="w-1/5 h-[0.25px] bg-gray-800"></div>
-                    <span className="mx-4">Or</span>
-                    <div className="w-1/5 h-[0.25px] bg-gray-800"></div>
+                  <div className="flex justify-center items-center -mb-4 text-light">
+                    <div className="w-1/5 h-[0.25px] bg-gray-700"></div>
+                    <span className="mx-4">OR</span>
+                    <div className="w-1/5 h-[0.25px] bg-gray-700"></div>
                   </div>
                   <div>
                     <label
@@ -476,7 +479,7 @@ function Home() {
                       </Button>
                     </div>
                     <p className=" text-sm text-gray-500" id="file-input-help">
-                      PNG, JPEG or JPG.
+                      Image Formats (like PNG, JPEG or JPG).
                     </p>
                   </div>
                 </div>
@@ -500,7 +503,7 @@ function Home() {
               {!collapsedSections.mainSettings && (
                 <div>
                   <div className="grid grid-cols-2 gap-x-8 gap-y-6 p-4 mt-2 bg-[#222] rounded-md">
-                    <div className="col-span-2 flex justify-between items-start">
+                    <div className="col-span-2 flex justify-start items-start">
                       <div className="flex flex-col w-3/5">
                         <label className="mb-3 text-white text-sm font-medium">
                           Dithering Algorithm
@@ -512,7 +515,36 @@ function Home() {
                           onSelectFnArgs={["algorithm"]}
                         />
                       </div>
-                      <div className="relative ml-4">
+                      
+                    <div className="relative ml-4 w-2/5">
+                      <button
+                        data-tooltip-target="tooltip-scale"
+                        type="button"
+                        className="tooltip-button absolute top-0 left-[8em] p-0 m-0 text-xs text-center font-bold text-black bg-muted-foreground h-[1.5em] aspect-square rounded-[50%]"
+                      >
+                        <div
+                          id="tooltip-scale"
+                          role="tooltip"
+                          className="absolute hidden opacity-0 z-10 top-0 -left-[6em] lg:-left-[2em] -translate-x-[40%] lg:-translate-x-[50%] -translate-y-[125%] w-[30ch] px-3 py-2 text-sm lg:text-xs text-start font-normal text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm tooltip"
+                        >
+                          Does not work with ordered algorithms (eg: Bayer).
+                        </div>
+                        <div>i</div>
+                      </button>
+                      <RangeSlider
+                        value={settings.noOfColors}
+                        min={2}
+                        max={16}
+                        step={1}
+                        onChangeFn={handleValueChangeDebounced}
+                        onChangeFnArgs={["noOfColors"]}
+                        id="no-of-colors"
+                        title="No. of Colors"
+                        showValue={settings.noOfColors}
+                      />
+                    </div>
+                    </div>
+                    <div className="relative">
                         <RangeSlider
                           value={settings.noise}
                           min={1}
@@ -533,7 +565,7 @@ function Home() {
                           <div
                             id="tooltip-noise"
                             role="tooltip"
-                            className="absolute hidden opacity-0 z-10 top-0 left-0 -translate-x-[60%] lg:-translate-x-[50%] -translate-y-[125%] w-[30ch] px-3 py-2 text-sm lg:text-xs text-start font-normal text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm tooltip"
+                            className="absolute hidden opacity-0 z-10 top-0 left-[6em] lg:left-[4em] -translate-x-[60%] lg:-translate-x-[50%] -translate-y-[125%] w-[30ch] px-3 py-2 text-sm lg:text-xs text-start font-normal text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm tooltip"
                           >
                             Changes might be slower for very large images and
                             scale values. Only works with error based algorithms
@@ -542,34 +574,6 @@ function Home() {
                           <div>i</div>
                         </button>
                       </div>
-                    </div>
-                    <div className="relative">
-                      <button
-                        data-tooltip-target="tooltip-scale"
-                        type="button"
-                        className="tooltip-button absolute top-0 left-[8em] p-0 m-0 text-xs text-center font-bold text-black bg-muted-foreground h-[1.5em] aspect-square rounded-[50%]"
-                      >
-                        <div
-                          id="tooltip-scale"
-                          role="tooltip"
-                          className="absolute hidden opacity-0 z-10 top-0 left-0 -translate-x-[40%] lg:-translate-x-[50%] -translate-y-[125%] w-[30ch] px-3 py-2 text-sm lg:text-xs text-start font-normal text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm tooltip"
-                        >
-                          Does not work with ordered algorithms (eg: Bayer).
-                        </div>
-                        <div>i</div>
-                      </button>
-                      <RangeSlider
-                        value={settings.noOfColors}
-                        min={2}
-                        max={16}
-                        step={1}
-                        onChangeFn={handleValueChangeDebounced}
-                        onChangeFnArgs={["noOfColors"]}
-                        id="no-of-colors"
-                        title="No. of Colors"
-                        showValue={settings.noOfColors}
-                      />
-                    </div>
                     <div className="relative">
                       <button
                         data-tooltip-target="tooltip-scale"
@@ -579,7 +583,7 @@ function Home() {
                         <div
                           id="tooltip-scale"
                           role="tooltip"
-                          className="absolute hidden opacity-0 z-10 top-0 left-0 -translate-x-[60%] lg:-translate-x-[50%] -translate-y-[125%] w-[30ch] px-3 py-2 text-sm lg:text-xs text-start font-normal text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm tooltip"
+                          className="absolute hidden opacity-0 z-10 top-0 left-[2em] -translate-x-[60%] lg:-translate-x-[50%] -translate-y-[125%] w-[30ch] px-3 py-2 text-sm lg:text-xs text-start font-normal text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm tooltip"
                         >
                           Changes might be slower for very large images and
                           values.
@@ -635,7 +639,7 @@ function Home() {
               <Divider classNames="mt-6" />
 
               <div className="flex justify-between items-center p-3  bg-[#222] rounded-md text-white text-base font-medium segment-title">
-                <h3>More filters</h3>
+                <h3>More Filters</h3>
                 <button
                   className="bg-transparent p-0"
                   onClick={() => toggleCollapse("moreFilters")}
