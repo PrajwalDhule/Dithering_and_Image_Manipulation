@@ -1,5 +1,5 @@
-import React from 'react';
-import ImageHeader from '@/components/ui/image-header';
+import React from "react";
+import ImageHeader from "@/components/ui/image-header";
 
 interface ImageSectionProps {
   isImageZoomMode: boolean;
@@ -12,7 +12,7 @@ interface ImageSectionProps {
   originalImage?: HTMLImageElement;
 }
 
-export const ImageSection: React.FC<ImageSectionProps> = ({
+const ImageSection: React.FC<ImageSectionProps> = ({
   isImageZoomMode,
   collapsedSections,
   toggleCollapse,
@@ -79,3 +79,5 @@ export const ImageSection: React.FC<ImageSectionProps> = ({
     </>
   );
 };
+
+export default React.memo(ImageSection);

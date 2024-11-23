@@ -1,9 +1,9 @@
-import { useEffect, useRef, useState } from "react";
-import { ImageUpload } from "./ImageUpload";
-import { Navbar } from "./Navbar";
+import { useCallback, useEffect, useRef, useState } from "react";
+import ImageUpload from "./ImageUpload";
+import Navbar from "./Navbar";
 import { MainSettings } from "./MainSettings";
 import { MoreFilters } from "./MoreFilters";
-import { ImageSection } from "./ImageSection";
+import ImageSection from "./ImageSection";
 import { Combobox } from "./Combobox";
 import { ProductHuntEmbedMobile } from "./productHuntEmbeds/ProductHuntEmbedMobile";
 import { Button } from "./ui/button";
@@ -127,34 +127,24 @@ function Home() {
     }
   }, [settings]);
 
-  const toggleCollapse = (section: string) => {
-    if (section in collapsedSections) {
-      setCollapsedSections((prevState) => ({
-        ...prevState,
-        [section]: !prevState[section as keyof typeof collapsedSections],
-      }));
-    }
-  };
-
-  const exportImage = () => {
-    if (outputCanvas) {
-      const link = document.createElement("a");
-      link.download = "ditherplay-image.png";
-      link.href = outputCanvas.toDataURL("image/png");
-      link.click();
-    } else {
-      alert(
-        "Oops! Couldn't get the output image, something went wrong. Please try again later."
-      );
-    }
-  };
+  const toggleCollapse = useCallback(
+    (section: string) => {
+      if (section in collapsedSections) {
+        setCollapsedSections((prevState) => ({
+          ...prevState,
+          [section]: !prevState[section as keyof typeof collapsedSections],
+        }));
+      }
+    },
+    [collapsedSections]
+  );
 
   return (
     <>
       <div className="relative w-[92.5vw]">
         <Navbar
           setIsImageZoomMode={setIsImageZoomMode}
-          exportImage={exportImage}
+          outputCanvas={outputCanvas}
         />
         <div className="lg:flex flex-row-reverse justify-between items-start">
           <div className="">

@@ -1,14 +1,14 @@
-import React from 'react';
-import { Combobox } from './Combobox';
-import RangeSlider from './ui/range-slider';
-import  Tooltip  from '@/components/ui/tooltip';
-import  {RadioButton} from '@/components/ui/radiobutton';
-import Divider from '@/components/ui/divider';
-import { OptionsData } from '@/models/Options';
-import { SettingsData } from '@/models/Settings';
+import React from "react";
+import { Combobox } from "./Combobox";
+import RangeSlider from "./ui/range-slider";
+import Tooltip from "@/components/ui/tooltip";
+import { RadioButton } from "@/components/ui/radiobutton";
+import Divider from "@/components/ui/divider";
+import { OptionsData } from "@/models/Options";
+import { SettingsData } from "@/models/Settings";
 
 interface MainSettingsProps {
-  settings: SettingsData
+  settings: SettingsData;
   algorithmOptions: OptionsData;
   handleValueChange: (eventValue: string, settingsKey: string) => void;
   handleValueChangeDebounced: (value: any, key: string) => void;
@@ -20,7 +20,7 @@ export const MainSettings: React.FC<MainSettingsProps> = ({
   algorithmOptions,
   handleValueChange,
   handleValueChangeDebounced,
-  handleRadioChange
+  handleRadioChange,
 }) => {
   return (
     <div className="grid grid-cols-2 gap-x-8 gap-y-6 p-4 mt-2 bg-[#222] rounded-md">

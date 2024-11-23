@@ -1,13 +1,26 @@
 import React from "react";
 import { Button } from "./ui/button";
-import Logo from "../assets/DitherPlay-logo-4.png";
+import Logo from "../assets/DitherPlay-logo-5.png";
 import ProductHuntEmbedDesktop from "./productHuntEmbeds/ProductHuntEmbedDesktop";
 
 interface NavbarProps {
   setIsImageZoomMode: React.Dispatch<React.SetStateAction<boolean>>;
-  exportImage: () => void;
+  outputCanvas: HTMLCanvasElement | undefined;
 }
-export const Navbar = ({ setIsImageZoomMode, exportImage }: NavbarProps) => {
+const Navbar = ({ setIsImageZoomMode, outputCanvas }: NavbarProps) => {
+  const exportImage = () => {
+    if (outputCanvas) {
+      const link = document.createElement("a");
+      link.download = "ditherplay-image.png";
+      link.href = outputCanvas.toDataURL("image/png");
+      link.click();
+    } else {
+      alert(
+        "Oops! Couldn't get the output image, something went wrong. Please try again later."
+      );
+    }
+  };
+
   return (
     <div className="lg:sticky lg:top-0 flex justify-between items-center pt-4 pb-6">
       <div>
@@ -42,3 +55,5 @@ export const Navbar = ({ setIsImageZoomMode, exportImage }: NavbarProps) => {
     </div>
   );
 };
+
+export default React.memo(Navbar);

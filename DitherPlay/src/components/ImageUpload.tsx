@@ -1,13 +1,11 @@
-import React, { useRef } from 'react';
-import { Button } from '@/components/ui/button';
+import React, { useRef } from "react";
+import { Button } from "@/components/ui/button";
 
 interface ImageUploadProps {
   setOriginalImage: (image: HTMLImageElement) => void;
 }
 
-export const ImageUpload: React.FC<ImageUploadProps> = ({ 
-  setOriginalImage 
-}) => {
+const ImageUpload: React.FC<ImageUploadProps> = ({ setOriginalImage }) => {
   const imageUrlInputRef = useRef<HTMLInputElement>(null);
   const imageFileInputRef = useRef<HTMLInputElement>(null);
 
@@ -50,8 +48,8 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
   return (
     <div className="grid grid-cols-1 gap-x-8 gap-y-3 p-3 mt-2 bg-[#222] rounded-md">
       <div className="flex flex-col justify-start items-start">
-        <label 
-          htmlFor="input-image-url" 
+        <label
+          htmlFor="input-image-url"
           className="mb-3 text-text text-sm font-medium"
         >
           Image url
@@ -109,3 +107,5 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
     </div>
   );
 };
+
+export default React.memo(ImageUpload);
