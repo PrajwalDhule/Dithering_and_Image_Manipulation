@@ -1,6 +1,5 @@
 import { SettingsData } from "@/models/Settings";
 import { hexToRgb, hslToRgb, rgbToHsl } from "./helper";
-import { get } from "http";
 
 export function getClosestColor(r: number, g: number, b: number, factor = 1) {
   r = Math.round((factor * r) / 255) * Math.floor(255 / factor);
