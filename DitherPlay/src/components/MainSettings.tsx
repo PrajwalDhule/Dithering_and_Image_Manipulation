@@ -97,7 +97,7 @@ export const MainSettings: React.FC<MainSettingsProps> = ({
 
       <Divider />
 
-      <div className="col-span-2 flex justify-start items-center gap-8 py-2">
+      <div className="col-span-2 flex justify-start items-center gap-4 lg:gap-8 py-2">
         <RadioButton
           text="Original"
           value="original"
