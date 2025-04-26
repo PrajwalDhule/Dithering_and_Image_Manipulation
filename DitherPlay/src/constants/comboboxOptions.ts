@@ -19,8 +19,12 @@ export const algorithmOptions: OptionsData = {
       label: "Bayer",
     },
     {
+      value: "halftone",
+      label: "Halftone",
+    },
+    {
       value: "quantize",
-      label: "Quantized (no dither)",
+      label: "Quantized (no error diffusion)",
     },
     {
       value: "atkinson-no-quantize",

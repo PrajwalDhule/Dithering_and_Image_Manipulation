@@ -58,7 +58,7 @@ function applyTint(
   data[i + 2] = newB;
 }
 
-function bayer(
+export function bayer(
   data: Uint8ClampedArray,
   i: number,
   imageWidth: number,
@@ -71,14 +71,14 @@ function bayer(
 
   // Bayer ordered dithering (needs exclusion of getClosestColor and error considerations as this is not an error method)
   const thresholdMat = [
-    [21, 37, 25, 41, 22, 38, 26, 42],
-    [53, 5, 57, 9, 54, 6, 58, 10],
-    [29, 45, 17, 33, 30, 46, 18, 34],
-    [61, 13, 49, 1, 62, 14, 50, 2],
-    [23, 39, 27, 43, 20, 36, 24, 40],
-    [55, 7, 59, 11, 52, 4, 56, 8],
-    [31, 47, 19, 35, 28, 44, 16, 32],
-    [63, 15, 51, 3, 60, 12, 48, 0],
+    [ 0, 48, 12, 60,  3, 51, 15, 63 ],
+    [32, 16, 44, 28, 35, 19, 47, 31 ],
+    [ 8, 56,  4, 52, 11, 59,  7, 55 ],
+    [40, 24, 36, 20, 43, 27, 39, 23 ],
+    [ 2, 50, 14, 62,  1, 49, 13, 61 ],
+    [34, 18, 46, 30, 33, 17, 45, 29 ],
+    [10, 58,  6, 54,  9, 57,  5, 53 ],
+    [42, 26, 38, 22, 41, 25, 37, 21 ]
   ];
 
   const N = thresholdMat.length;
@@ -92,7 +92,71 @@ function bayer(
   data[i + 2] = data[i + 2] > threshold ? 255 : 0;
 }
 
-function floydSteinberg(
+export function halftone(
+  data: Uint8ClampedArray,
+  imageWidth: number,
+  imageHeight: number,
+  cellSize: number
+){
+  const output = new Uint8ClampedArray(data.length);
+
+  for (let y = 0; y < imageHeight; y += cellSize) {
+    for (let x = 0; x < imageWidth; x += cellSize) {
+      let sum = 0;
+      let count = 0;
+
+      for (let cy = 0; cy < cellSize; cy++) {
+        for (let cx = 0; cx < cellSize; cx++) {
+          const px = x + cx;
+          const py = y + cy;
+          if (px >= imageWidth || py >= imageHeight) continue;
+
+          const idx = (py * imageWidth + px) * 4;
+          const r = data[idx];
+          const g = data[idx + 1];
+          const b = data[idx + 2];
+          const gray = 0.299 * r + 0.587 * g + 0.114 * b;
+          sum += gray;
+          count++;
+        }
+      }
+
+      const avg = sum / count;
+
+      const maxRadius = cellSize / 2;
+      const radius = ((255 - avg) / 255) * maxRadius;
+
+      const centerX = x + cellSize / 2;
+      const centerY = y + cellSize / 2;
+
+      for (let cy = 0; cy < cellSize; cy++) {
+        for (let cx = 0; cx < cellSize; cx++) {
+          const px = x + cx;
+          const py = y + cy;
+          if (px >= imageWidth || py >= imageHeight) continue;
+
+          const dx = px + 0.5 - centerX;
+          const dy = py + 0.5 - centerY;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+
+          const idx = (py * imageWidth + px) * 4;
+          const color = dist <= radius ? 0 : 255; 
+
+          output[idx] = color;     
+          output[idx + 1] = color; 
+          output[idx + 2] = color; 
+          output[idx + 3] = 255;   
+        }
+      }
+    }
+  }
+
+  for (let i = 0; i < data.length; i++) {
+    data[i] = output[i];
+  }
+}
+
+export function floydSteinberg(
   data: Uint8ClampedArray,
   i: number,
   errorR: number,
@@ -131,7 +195,7 @@ function floydSteinberg(
   );
 }
 
-function atkinson(
+export function atkinson(
   data: Uint8ClampedArray,
   i: number,
   errorR: number,
@@ -246,7 +310,10 @@ export function applySettings(
       for (let i = 0; i < data.length; i += 4) {
         bayer(data, i, width, height);
       }
-    } else if (settings.algorithm !== "none") {
+    } else if(settings.algorithm === "halftone") {
+      halftone(data, width, height, 8);
+    }
+    else if (settings.algorithm !== "none") {
       for (let i = 0; i < data.length; i += 4) {
         const x = (i / 4) % width;
         const y = Math.floor(i / 4 / width);
