@@ -32,7 +32,7 @@ function getAppliedFilters(settings: SettingsData): string {
 }
 
 function applyGrayscale(data: Uint8ClampedArray, i: number): void {
-  const filterVal = (data[i] + data[i + 1] + data[i + 2]) / 3;
+  const filterVal = 0.299 * data[i] + 0.587 * data[i + 1] + 0.114 * data[i + 2];
   data[i] = data[i + 1] = data[i + 2] = filterVal;
 }
 
@@ -81,11 +81,17 @@ export function bayer(
     [42, 26, 38, 22, 41, 25, 37, 21 ]
   ];
 
-  const N = thresholdMat.length;
+  // const thresholdMat = [
+  //   [  0,  8,  2, 10,  1,  9,  3, 11 ],
+  //   [ 12,  4, 14,  6, 13,  5, 15,  7 ]
+  // ];
 
-  const iModN = x % N;
+  const M = thresholdMat.length;
+  const N = thresholdMat[0].length;
+
+  const iModM = x % M;
   const jModN = y % N;
-  const threshold = 255 * ((thresholdMat[iModN][jModN] + 0.5) / Math.pow(N, 2));
+  const threshold = 255 * ((thresholdMat[iModM][jModN] + 0.5) / (M * N));
 
   data[i] = data[i] > threshold ? 255 : 0;
   data[i + 1] = data[i + 1] > threshold ? 255 : 0;
@@ -311,7 +317,7 @@ export function applySettings(
         bayer(data, i, width, height);
       }
     } else if(settings.algorithm === "halftone") {
-      halftone(data, width, height, 8);
+      halftone(data, width, height, 36);
     }
     else if (settings.algorithm !== "none") {
       for (let i = 0; i < data.length; i += 4) {
